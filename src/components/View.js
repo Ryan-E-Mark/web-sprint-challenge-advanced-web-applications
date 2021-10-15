@@ -24,7 +24,6 @@ const View = (props) => {
         axiosWithAuth()
             .delete(`http://localhost:5000/api/articles/${id}`)
                 .then(resp => {
-                    console.log("after delete: ", resp.data);
                     setLocalState(id);
                 })
                 .catch(err => {
@@ -32,13 +31,21 @@ const View = (props) => {
                 })
     }
 
-    
     const setLocalState =  (id) => {
         setArticles(articles.filter(article => article.id !== id));
-        console.log("article state:", articles);
     }
 
     const handleEdit = (article) => {
+        axiosWithAuth()
+            .put(`http://localhost:5000/api/articles/${editId}`, article)
+                .then(resp => {
+                    console.log(resp);
+                    setArticles(resp.data);
+                    setEditing(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
     }
 
     const handleEditSelect = (id)=> {
