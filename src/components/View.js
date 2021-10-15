@@ -24,11 +24,18 @@ const View = (props) => {
         axiosWithAuth()
             .delete(`http://localhost:5000/api/articles/${id}`)
                 .then(resp => {
-                    console.log(resp);
+                    console.log("after delete: ", resp.data);
+                    setLocalState(id);
                 })
                 .catch(err => {
                     console.log(err);
                 })
+    }
+
+    
+    const setLocalState =  (id) => {
+        setArticles(articles.filter(article => article.id !== id));
+        console.log("article state:", articles);
     }
 
     const handleEdit = (article) => {
