@@ -31,6 +31,7 @@ const Login = () => {
             })
             .catch(err => {
                 console.log(err);
+                push('/');
                 setError(err.response.data);
             })
     }
