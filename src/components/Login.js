@@ -30,9 +30,7 @@ const Login = () => {
                 push('/view');
             })
             .catch(err => {
-                console.log(err);
-                push('/');
-                setError(err.response.data);
+                setError(err.response.data.error);
             })
     }
     
@@ -60,8 +58,8 @@ const Login = () => {
                     />
                 </Label>
                 <Button id="submit">Login</Button>
+                <p id="error">{error}</p>
             </FormGroup>
-            <p id="error">{error}</p>
         </ModalContainer>
     </ComponentContainer>);
 }
