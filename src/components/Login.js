@@ -1,12 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Login = () => {
+
+    const { push } = useHistory();
+
+    const [logIn, setLogIn] = useState({
+        username: '',
+        password: '',
+    });
+    const [error, setError] = useState('');
+
+
+    const handleChange = (e) => {
+        setLogIn({
+            ...logIn,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:5000/api/login', logIn)
+            .then(resp => {
+                console.log(resp);
+                localStorage.setItem('token', resp.data.token);
+                push('/view');
+            })
+            .catch(err => {
+                console.log(err);
+                setError(err.response.data);
+            })
+    }
     
     return(<ComponentContainer>
         <ModalContainer>
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
+            <FormGroup onSubmit={handleSubmit}>
+                <Label> Username
+                    <Input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={logIn.username}
+                        onChange={handleChange}
+                    />
+                </Label>
+                <Label> Password
+                    <Input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={logIn.password}
+                        onChange={handleChange}
+                    />
+                </Label>
+                <Button id="submit">Login</Button>
+            </FormGroup>
+            <p id="error">{error}</p>
         </ModalContainer>
     </ComponentContainer>);
 }
